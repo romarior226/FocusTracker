@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_timer"
+        android:title="Таймер"
+        android:icon="@android:drawable/ic_lock_idle_alarm" />
+
+    <item
+        android:id="@+id/nav_tasks"
+        android:title="Задачі"
+        android:icon="@android:drawable/ic_menu_agenda" />
+
+    <item
+        android:id="@+id/nav_history"
+        android:title="Історія"
+        android:icon="@android:drawable/ic_menu_recent_history" />
+
+</menu>

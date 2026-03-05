@@ -1,0 +1,73 @@
+package com.example.focustracker.pressentation
+
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.focustracker.R
+import com.example.focustracker.databinding.FragmentTimerBinding
+import kotlinx.coroutines.launch
+
+class TImerFragment : Fragment(R.layout.fragment_timer) {
+
+
+    val adapter = TaskAdapter()
+    private var _binding: FragmentTimerBinding? = null
+    private val binding: FragmentTimerBinding
+        get() = _binding ?: throw RuntimeException("FragmentTimerBinding")
+
+    private val viewModel: TimerViewModel by viewModels()
+
+    fun getTime() {
+        with(binding) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.timer.collect { time ->
+                    tvTimer.text = time.toString()
+                    Log.d("GET_TIME", "time $time")
+                }
+            }
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentTimerBinding.inflate(inflater , container , false )
+        return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding
+        super.onViewCreated(view, savedInstanceState)
+        getTime()
+        binding.btnStartPause.setOnClickListener {
+            Log.d("TIMER_FRAGMENT", "btn on pause")
+            btnStartPause()
+        }
+        binding.btnReset.setOnClickListener {
+            Log.d("TIMER_FRAGMENT", "btn on reset")
+            btnReset()
+
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun btnStartPause() {
+        viewModel.startPause()
+    }
+
+    private fun btnReset() {
+        viewModel.reset()
+    }
+}
