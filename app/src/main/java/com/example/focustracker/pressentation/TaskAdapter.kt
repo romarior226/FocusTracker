@@ -1,12 +1,16 @@
 package com.example.focustracker.pressentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.focustracker.databinding.ItemTaskBinding
 import com.example.focustracker.domain.Task
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TaskAdapter(
     private val onDeleteClick: ((Task) -> Unit)? = null,
@@ -32,8 +36,15 @@ class TaskAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
+
         val item = getItem(position)
         with(holder.binding) {
+            val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+            tvCreatedAt.text = "Створено: ${format.format(Date(item.timeCreation))}"
+            if(item.completedTime != null) {
+                tvCompletedAt.visibility = View.VISIBLE
+                tvCompletedAt.text = "Виконано : ${format.format(Date(item.timeCreation))}"
+            }
             tvTaskName.text = item.name
             cbTaskDone.isChecked = item.isDone
             btnDelete.setOnClickListener {

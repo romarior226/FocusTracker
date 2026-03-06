@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/tasksFragment">
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.focustracker.pressentation.HistoryFragment"
+        android:label="HistoryFragment" />
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.example.focustracker.pressentation.TasksFragment"
+        android:label="TasksFragment" />
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.example.focustracker.pressentation.TimerFragment"
+        android:label="TimerFragment" />
+</navigation>

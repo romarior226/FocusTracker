@@ -9,6 +9,7 @@ import com.example.focustracker.domain.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
@@ -24,7 +25,13 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
     fun addTask(name: String) {
         viewModelScope.launch {
-            val task = Task(_tasks.value.size, name = name, isDone = false)
+            val task = Task(
+                _tasks.value.size,
+                name = name,
+                isDone = false,
+                timeCreation = System.currentTimeMillis(),
+                null
+            )
             _tasks.value += task
             repository.insertTask(task.toTaskEntityDbModel())
         }
@@ -32,12 +39,20 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
     fun updateTask(task: Task) {
         viewModelScope.launch {
+            val updatedTask = task.copy(isDone = true, completedTime = System.currentTimeMillis())
             _tasks.value = _tasks.value.map {
                 if (it.id == task.id) {
-                    it.copy(isDone = true)
+                    it.copy(isDone = true, completedTime = System.currentTimeMillis())
                 } else it
+
             }
-            repository.updateTask(task.toTaskEntityDbModel())
+            _history.value = _tasks.value.map {
+                if (it.id == task.id) {
+                    it.copy(isDone = true, completedTime = System.currentTimeMillis())
+                } else it
+
+            }
+            repository.updateTask(updatedTask.toTaskEntityDbModel())
         }
     }
 

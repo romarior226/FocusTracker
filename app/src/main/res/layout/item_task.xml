@@ -15,18 +15,47 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- Текст задачі -->
-    <TextView
-        android:id="@+id/tv_task_name"
+    <!-- Колонка з назвою і часом -->
+    <LinearLayout
+        android:id="@+id/layout_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Назва задачі"
-        android:textSize="16sp"
+        android:orientation="vertical"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/cb_task_done"
         app:layout_constraintEnd_toStartOf="@id/btn_delete"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Назва задачі -->
+        <TextView
+            android:id="@+id/tv_task_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Назва задачі"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Час створення -->
+        <TextView
+            android:id="@+id/tv_created_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Створено: —"
+            android:textSize="12sp"
+            android:alpha="0.6" />
+
+        <!-- Час виконання — за замовчуванням прихований -->
+        <TextView
+            android:id="@+id/tv_completed_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Виконано: —"
+            android:textSize="12sp"
+            android:alpha="0.6"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <!-- Кнопка видалення -->
     <ImageButton
