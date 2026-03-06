@@ -6,20 +6,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.focustracker.R
+import com.example.focustracker.data.TaskRepository
+import com.example.focustracker.data.database.AppDatabase
 import com.example.focustracker.databinding.FragmentTasksBinding
-import com.example.focustracker.databinding.FragmentTimerBinding
+
 import kotlinx.coroutines.launch
 
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
 
-    val adapter = TaskAdapter()
-    private val viewModel: TaskViewModel by viewModels()
+    val adapter = TaskAdapter(
+        { task -> viewModel.deleteTask(task) },
+        { task -> viewModel.addCompletedTask(task) },
+        { task -> viewModel.updateTask(task) }
+
+    )
+    private val viewModel: TaskViewModel by activityViewModels {
+        TaskViewModelFactory(TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()))
+    }
 
     private var _binding: FragmentTasksBinding? = null
     private val binding: FragmentTasksBinding

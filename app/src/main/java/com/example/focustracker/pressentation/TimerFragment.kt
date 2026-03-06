@@ -12,10 +12,9 @@ import com.example.focustracker.R
 import com.example.focustracker.databinding.FragmentTimerBinding
 import kotlinx.coroutines.launch
 
-class TImerFragment : Fragment(R.layout.fragment_timer) {
+class TimerFragment : Fragment(R.layout.fragment_timer) {
 
 
-    val adapter = TaskAdapter()
     private var _binding: FragmentTimerBinding? = null
     private val binding: FragmentTimerBinding
         get() = _binding ?: throw RuntimeException("FragmentTimerBinding")

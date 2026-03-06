@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_timer"
+        android:id="@+id/timerFragment"
         android:title="Таймер"
         android:icon="@android:drawable/ic_lock_idle_alarm" />
 
     <item
-        android:id="@+id/nav_tasks"
+        android:id="@+id/tasksFragment"
         android:title="Задачі"
         android:icon="@android:drawable/ic_menu_agenda" />
 
     <item
-        android:id="@+id/nav_history"
+        android:id="@+id/historyFragment"
         android:title="Історія"
         android:icon="@android:drawable/ic_menu_recent_history" />
 

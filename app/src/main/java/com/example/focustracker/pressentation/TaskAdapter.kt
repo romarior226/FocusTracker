@@ -1,21 +1,23 @@
 package com.example.focustracker.pressentation
 
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.focustracker.databinding.FragmentTimerBinding
 import com.example.focustracker.databinding.ItemTaskBinding
 import com.example.focustracker.domain.Task
 
-class TaskAdapter : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DIFF_CALLBACK) {
+class TaskAdapter(
+    private val onDeleteClick: ((Task) -> Unit)? = null,
+    private val onChecked: ((Task) -> Unit)? = null,
+    private val updateTasks: ((Task) -> Unit)? = null
+) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DIFF_CALLBACK) {
 
-    class TaskViewHolder( val binding: ItemTaskBinding) :
+    class TaskViewHolder(val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
     }
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -34,7 +36,14 @@ class TaskAdapter : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DIFF_CALLBACK)
         with(holder.binding) {
             tvTaskName.text = item.name
             cbTaskDone.isChecked = item.isDone
+            btnDelete.setOnClickListener {
+                onDeleteClick?.invoke(item)
+            }
+            cbTaskDone.setOnClickListener {
+                onChecked?.invoke(item)
+                updateTasks?.invoke(item)
 
+            }
 
         }
     }
