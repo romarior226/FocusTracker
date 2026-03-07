@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.focustracker.R
+import com.example.focustracker.data.HistoryRepository
 import com.example.focustracker.data.TaskRepository
 import com.example.focustracker.data.database.AppDatabase
 import com.example.focustracker.databinding.FragmentTasksBinding
@@ -21,13 +22,16 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
 
     val adapter = TaskAdapter(
+        true,
         { task -> viewModel.deleteTask(task) },
-        { task -> viewModel.addCompletedTask(task) },
         { task -> viewModel.updateTask(task) }
 
     )
     private val viewModel: TaskViewModel by activityViewModels {
-        TaskViewModelFactory(TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()))
+        TaskViewModelFactory(
+            TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()),
+            HistoryRepository(AppDatabase.getDataBase(requireContext()).historyTaskDao())
+        )
     }
 
     private var _binding: FragmentTasksBinding? = null

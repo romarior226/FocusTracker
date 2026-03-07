@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @Entity(tableName = "tasks")
 data class TaskEntityDbModel(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val isDone: Boolean,
     val timeCreation: Long,

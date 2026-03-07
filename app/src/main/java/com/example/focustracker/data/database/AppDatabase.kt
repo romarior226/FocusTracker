@@ -4,12 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.focustracker.data.dao.HistoryDao
 import com.example.focustracker.data.dao.TaskDao
+import com.example.focustracker.data.entity.HistoryEntityDbModel
 import com.example.focustracker.data.entity.TaskEntityDbModel
 
-@Database(entities = [TaskEntityDbModel::class], version = 2)
+@Database(entities = [TaskEntityDbModel::class , HistoryEntityDbModel::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
+    abstract fun historyTaskDao() : HistoryDao
 
     companion object {
         @Volatile

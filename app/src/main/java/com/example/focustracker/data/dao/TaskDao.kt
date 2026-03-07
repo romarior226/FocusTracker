@@ -13,11 +13,8 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks")
     suspend fun getAllTasks(): List<TaskEntityDbModel>
-
-    @Query("SELECT * FROM tasks WHERE isDone = 1")
-    suspend fun getCompletedTasks(): List<TaskEntityDbModel>
     @Insert
-    suspend fun insertTask(taskEntityDbModel: TaskEntityDbModel)
+    suspend fun insertTask(taskEntityDbModel: TaskEntityDbModel): Long
 
     @Update
     suspend fun updateTask(taskEntityDbModel: TaskEntityDbModel)

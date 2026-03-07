@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.focustracker.R
+import com.example.focustracker.data.HistoryRepository
 import com.example.focustracker.data.TaskRepository
 import com.example.focustracker.data.database.AppDatabase
 import com.example.focustracker.databinding.FragmentHistoryBinding
@@ -18,8 +19,12 @@ import kotlin.getValue
 
 class  HistoryFragment : Fragment(R.layout.fragment_history) {
     private val viewModel: TaskViewModel by activityViewModels {
-        TaskViewModelFactory(TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()))
+        TaskViewModelFactory(
+            TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()),
+            HistoryRepository(AppDatabase.getDataBase(requireContext()).historyTaskDao())
+        )
     }
+
 
     private var _binding: FragmentHistoryBinding? = null
     private val binding: FragmentHistoryBinding
@@ -36,7 +41,10 @@ class  HistoryFragment : Fragment(R.layout.fragment_history) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = TaskAdapter(onDeleteClick =  { task -> viewModel.deleteHistoryTask(task) })
+        val adapter = TaskAdapter(
+            false,
+            { task -> viewModel.deleteHistoryTask(task) },
+        )
         super.onViewCreated(view, savedInstanceState)
         Log.d("HistoryFragment" , "onViewCreated ")
         binding.rvHistory.adapter = adapter

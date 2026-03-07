@@ -13,8 +13,8 @@ import java.util.Date
 import java.util.Locale
 
 class TaskAdapter(
+    private val isCheckboxEnabled: Boolean = true,
     private val onDeleteClick: ((Task) -> Unit)? = null,
-    private val onChecked: ((Task) -> Unit)? = null,
     private val updateTasks: ((Task) -> Unit)? = null
 ) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DIFF_CALLBACK) {
 
@@ -39,11 +39,12 @@ class TaskAdapter(
 
         val item = getItem(position)
         with(holder.binding) {
+            cbTaskDone.isEnabled = isCheckboxEnabled
             val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
             tvCreatedAt.text = "Створено: ${format.format(Date(item.timeCreation))}"
             if(item.completedTime != null) {
                 tvCompletedAt.visibility = View.VISIBLE
-                tvCompletedAt.text = "Виконано : ${format.format(Date(item.timeCreation))}"
+                tvCompletedAt.text = "Виконано : ${format.format(Date(item.completedTime))}"
             }
             tvTaskName.text = item.name
             cbTaskDone.isChecked = item.isDone
@@ -51,7 +52,6 @@ class TaskAdapter(
                 onDeleteClick?.invoke(item)
             }
             cbTaskDone.setOnClickListener {
-                onChecked?.invoke(item)
                 updateTasks?.invoke(item)
 
             }
