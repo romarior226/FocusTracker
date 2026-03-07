@@ -11,7 +11,6 @@ import com.example.focustracker.domain.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class TaskViewModel(
     private val taskRepository: TaskRepository,
@@ -49,7 +48,7 @@ class TaskViewModel(
             Log.d("TaskViewModel", "updateTask isDone: ${updatedTask.isDone}")
             _tasks.value = _tasks.value.map {
                 if (it.id == updatedTask.id) {
-                    it.copy(isDone = updatedTask.isDone, completedTime = System.currentTimeMillis())
+                    it.copy(isDone = updatedTask.isDone)
                 } else it
 
             }

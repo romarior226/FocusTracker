@@ -17,7 +17,7 @@ import com.example.focustracker.databinding.FragmentHistoryBinding
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-class  HistoryFragment : Fragment(R.layout.fragment_history) {
+class HistoryFragment : Fragment(R.layout.fragment_history) {
     private val viewModel: TaskViewModel by activityViewModels {
         TaskViewModelFactory(
             TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()),
@@ -46,13 +46,13 @@ class  HistoryFragment : Fragment(R.layout.fragment_history) {
             { task -> viewModel.deleteHistoryTask(task) },
         )
         super.onViewCreated(view, savedInstanceState)
-        Log.d("HistoryFragment" , "onViewCreated ")
+        Log.d("HistoryFragment", "onViewCreated ")
         binding.rvHistory.adapter = adapter
         binding.rvHistory.layoutManager = LinearLayoutManager(requireContext())
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.history.collect { tasks ->
                 adapter.submitList(tasks)
-                binding.tvTodaySummary.text = tasks.size.toString()
+                binding.tvTodaySummary.text = "Сьогодні: ${tasks.size} \uD83C\uDF45  "
             }
         }
 
