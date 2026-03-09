@@ -1,6 +1,6 @@
 package com.example.focustracker.data
 
-import com.example.focustracker.data.dao.HistoryDao
+import com.example.focustracker.data.database.dao.HistoryDao
 import com.example.focustracker.data.entity.HistoryEntityDbModel
 import com.example.focustracker.data.mapper.toTask
 import com.example.focustracker.domain.Task

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.focustracker.R
 import com.example.focustracker.data.HistoryRepository
 import com.example.focustracker.data.TaskRepository
+import com.example.focustracker.data.TodoRepository
 import com.example.focustracker.data.database.AppDatabase
 import com.example.focustracker.databinding.FragmentHistoryBinding
 import kotlinx.coroutines.launch
@@ -21,7 +22,8 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
     private val viewModel: TaskViewModel by activityViewModels {
         TaskViewModelFactory(
             TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()),
-            HistoryRepository(AppDatabase.getDataBase(requireContext()).historyTaskDao())
+            HistoryRepository(AppDatabase.getDataBase(requireContext()).historyTaskDao()),
+            TodoRepository()
         )
     }
 

@@ -2,7 +2,6 @@ package com.example.focustracker.pressentation
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.focustracker.R
 import com.example.focustracker.data.HistoryRepository
 import com.example.focustracker.data.TaskRepository
+import com.example.focustracker.data.TodoRepository
 import com.example.focustracker.data.database.AppDatabase
 import com.example.focustracker.databinding.FragmentTasksBinding
 
@@ -30,7 +30,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     private val viewModel: TaskViewModel by activityViewModels {
         TaskViewModelFactory(
             TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()),
-            HistoryRepository(AppDatabase.getDataBase(requireContext()).historyTaskDao())
+            HistoryRepository(AppDatabase.getDataBase(requireContext()).historyTaskDao()),
+            TodoRepository()
         )
     }
 
@@ -51,7 +52,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.tasks.collect { tasks ->
+            viewModel.tasks.collect { tasks->
                 adapter.submitList(tasks)
             }
         }

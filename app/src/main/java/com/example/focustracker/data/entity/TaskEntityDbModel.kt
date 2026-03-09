@@ -2,7 +2,6 @@ package com.example.focustracker.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 
 
 @Entity(tableName = "tasks")
@@ -11,6 +10,7 @@ data class TaskEntityDbModel(
     val name: String,
     val isDone: Boolean,
     val timeCreation: Long,
-    val completedTime: Long?
+    val completedTime: Long?,
+    val isFromNetwork: Boolean = false
 
 )

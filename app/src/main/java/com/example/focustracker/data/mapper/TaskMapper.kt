@@ -5,13 +5,14 @@ import com.example.focustracker.data.entity.TaskEntityDbModel
 import com.example.focustracker.domain.Task
 
 
-fun Task.toTaskEntityDbModel(): TaskEntityDbModel {
+fun Task.toEntityDbModel(): TaskEntityDbModel {
     return TaskEntityDbModel(
         id = this.id,
         name = this.name,
         isDone = this.isDone,
         timeCreation = this.timeCreation,
-        completedTime = this.completedTime
+        completedTime = this.completedTime,
+        isFromNetwork = this.isFromNetwork
     )
 }
 
@@ -21,7 +22,9 @@ fun TaskEntityDbModel.toTask(): Task {
         name = this.name,
         isDone = this.isDone,
         timeCreation = this.timeCreation,
-        completedTime = this.completedTime
+        completedTime = this.completedTime,
+        isFromNetwork = this.isFromNetwork
+
     )
 }
 fun HistoryEntityDbModel.toTask() : Task {

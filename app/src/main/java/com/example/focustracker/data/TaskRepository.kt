@@ -1,7 +1,6 @@
 package com.example.focustracker.data
 
-import android.util.Log
-import com.example.focustracker.data.dao.TaskDao
+import com.example.focustracker.data.database.dao.TaskDao
 import com.example.focustracker.data.entity.TaskEntityDbModel
 import com.example.focustracker.data.mapper.toTask
 import com.example.focustracker.domain.Task
@@ -9,6 +8,9 @@ import com.example.focustracker.domain.Task
 class TaskRepository(private val taskDao: TaskDao) {
     suspend fun getAllTaskEntityDbModelList(): List<TaskEntityDbModel> {
         return taskDao.getAllTasks()
+    }
+    suspend fun getNetworkTasksCount(): Int {
+        return taskDao.getNetworkTasksCount()
     }
 
     suspend fun getAllTaskList(): List<Task> {

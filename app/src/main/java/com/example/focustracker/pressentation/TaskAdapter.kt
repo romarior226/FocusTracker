@@ -46,7 +46,9 @@ class TaskAdapter(
                 tvCompletedAt.visibility = View.VISIBLE
                 tvCompletedAt.text = "Виконано : ${format.format(Date(item.completedTime))}"
             }
-            tvTaskName.text = item.name
+            if (item.isFromNetwork) {
+                tvTaskName.text = "\uD83C\uDF10 ${item.name}"
+            } else tvTaskName.text = item.name
             cbTaskDone.isChecked = item.isDone
             btnDelete.setOnClickListener {
                 onDeleteClick?.invoke(item)

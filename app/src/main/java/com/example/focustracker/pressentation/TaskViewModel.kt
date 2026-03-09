@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.focustracker.data.HistoryRepository
 import com.example.focustracker.data.TaskRepository
+import com.example.focustracker.data.TodoRepository
 import com.example.focustracker.data.mapper.toHistoryEntityDbModel
-import com.example.focustracker.data.mapper.toTaskEntityDbModel
+import com.example.focustracker.data.mapper.toEntityDbModel
 import com.example.focustracker.domain.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class TaskViewModel(
     private val taskRepository: TaskRepository,
-    private val historyRepository: HistoryRepository
+    private val historyRepository: HistoryRepository,
+    private val todoRepository: TodoRepository
 ) : ViewModel() {
 
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
@@ -23,9 +25,13 @@ class TaskViewModel(
     val history: StateFlow<List<Task>> = _history
 
     init {
-        loadTasks()
-        loadCompleteTask()
+        viewModelScope.launch {
+            loadCompleteTask()
+            loadNetworkTasks()
+            loadTasks()
+        }
     }
+
     fun addTask(name: String) {
         viewModelScope.launch {
             val task = Task(
@@ -35,10 +41,11 @@ class TaskViewModel(
                 timeCreation = System.currentTimeMillis(),
                 completedTime = null
             )
-            val generatedId = taskRepository.insertTask(task.toTaskEntityDbModel())
+            val generatedId = taskRepository.insertTask(task.toEntityDbModel())
             _tasks.value += task.copy(id = generatedId.toInt())
         }
     }
+
     fun updateTask(task: Task) {
         viewModelScope.launch {
             val updatedTask =
@@ -53,23 +60,45 @@ class TaskViewModel(
             if (updatedTask.isDone) {
                 addCompletedTask(updatedTask)
             }
-            taskRepository.updateTask(updatedTask.toTaskEntityDbModel())
+            taskRepository.updateTask(updatedTask.toEntityDbModel())
 
         }
     }
 
-    private fun loadTasks() {
-        viewModelScope.launch {
-            _tasks.value = taskRepository.getAllTaskList()
+    private suspend fun loadNetworkTasks() {
+        loadTasks()
+        val count = taskRepository.getNetworkTasksCount()
+        Log.d("TaskViewModel", "networkTasksCount: $count")
+        if (count == 0) {
+            try {
+                val todos = todoRepository.getTodos()
+                todos.forEach {
+                    val task = Task(
+                        id = 0,
+                        name = "🌐 ${it.title}",
+                        isDone = it.completed,
+                        timeCreation = System.currentTimeMillis(),
+                        completedTime = null,
+                        isFromNetwork = true
+                    )
+                    taskRepository.insertTask(task.toEntityDbModel())
+                }
+                loadTasks()
+            } catch (e: Exception) {
+                Log.e("TaskViewModel", "loadNetworkTasks error: ${e.message}")
+            }
         }
     }
-    private fun loadCompleteTask() {
-        viewModelScope.launch {
-            val result = historyRepository.getAllHistoryList()
-            Log.d("TaskViewModel", "loadCompleteTask: ${result.size}")
-            _history.value = result
-        }
+
+    private suspend fun loadTasks() {
+        _tasks.value = taskRepository.getAllTaskList()
     }
+
+    private suspend fun loadCompleteTask() {
+        val result = historyRepository.getAllHistoryList()
+        _history.value = result
+    }
+
     fun addCompletedTask(task: Task) {
         viewModelScope.launch {
             if (!_history.value.any { it.id == task.id }) {
@@ -79,12 +108,14 @@ class TaskViewModel(
             Log.d("TaskViewModel", "addCompletedTask")
         }
     }
+
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             _tasks.value -= task
-            taskRepository.deleteTask(task.toTaskEntityDbModel())
+            taskRepository.deleteTask(task.toEntityDbModel())
         }
     }
+
     fun deleteHistoryTask(task: Task) {
         viewModelScope.launch {
             _history.value -= task
