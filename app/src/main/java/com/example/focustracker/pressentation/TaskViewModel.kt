@@ -26,7 +26,6 @@ class TaskViewModel(
         loadTasks()
         loadCompleteTask()
     }
-
     fun addTask(name: String) {
         viewModelScope.launch {
             val task = Task(
@@ -40,7 +39,6 @@ class TaskViewModel(
             _tasks.value += task.copy(id = generatedId.toInt())
         }
     }
-
     fun updateTask(task: Task) {
         viewModelScope.launch {
             val updatedTask =
@@ -60,14 +58,11 @@ class TaskViewModel(
         }
     }
 
-
     private fun loadTasks() {
         viewModelScope.launch {
             _tasks.value = taskRepository.getAllTaskList()
         }
     }
-
-
     private fun loadCompleteTask() {
         viewModelScope.launch {
             val result = historyRepository.getAllHistoryList()
@@ -75,7 +70,6 @@ class TaskViewModel(
             _history.value = result
         }
     }
-
     fun addCompletedTask(task: Task) {
         viewModelScope.launch {
             if (!_history.value.any { it.id == task.id }) {
@@ -85,16 +79,12 @@ class TaskViewModel(
             Log.d("TaskViewModel", "addCompletedTask")
         }
     }
-
-
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             _tasks.value -= task
             taskRepository.deleteTask(task.toTaskEntityDbModel())
         }
     }
-
-
     fun deleteHistoryTask(task: Task) {
         viewModelScope.launch {
             _history.value -= task

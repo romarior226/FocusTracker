@@ -1,10 +1,12 @@
 package com.example.focustracker.pressentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -37,7 +39,7 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTimerBinding.inflate(inflater , container , false )
+        _binding = FragmentTimerBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -47,10 +49,30 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
         super.onViewCreated(view, savedInstanceState)
         getTime()
         binding.btnStartPause.setOnClickListener {
+            val command = if (viewModel.isRunning.value) {
+                TimerService.COMMAND_PAUSE
+            } else TimerService.COMMAND_START
+
+            ContextCompat.startForegroundService(
+                requireContext(),
+                TimerService.newIntent(
+                    requireContext(),
+                    viewModel.timer.value,
+                    command = command
+                )
+            )
             Log.d("TIMER_FRAGMENT", "btn on pause")
             btnStartPause()
         }
         binding.btnReset.setOnClickListener {
+            ContextCompat.startForegroundService(
+                requireContext(),
+                TimerService.newIntent(
+                    requireContext(),
+                    0,
+                    TimerService.COMMAND_STOP
+                )
+            )
             Log.d("TIMER_FRAGMENT", "btn on reset")
             btnReset()
 
