@@ -8,12 +8,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.core.content.edit
 
 class TimerService : Service() {
     private val notificationManager by lazy {
@@ -44,15 +44,25 @@ class TimerService : Service() {
             COMMAND_START -> {
                 job?.cancel()
                 job = scope.launch {
+                    getSharedPreferences("timer_prefs" ,Context.MODE_PRIVATE)
+                        .edit { putBoolean("is_running", true )
+                        }
                     var time = seconds
                     while (true) {
                         delay(1000)
                         time++
+                        getSharedPreferences("timer_prefs" ,Context.MODE_PRIVATE)
+                            .edit {
+                                putLong("seconds", time)
+                            }
                         notificationManager.notify(NOTIFICATION_ID, createNotification(time.toString()))
                     }
                 }
             }
             COMMAND_PAUSE -> {
+                getSharedPreferences("timer_prefs" ,Context.MODE_PRIVATE)
+                    .edit { putBoolean("is_running", false )
+                    }
                 job?.cancel()
                 notificationManager.notify(NOTIFICATION_ID, createNotification("⏸ $seconds"))
             }
