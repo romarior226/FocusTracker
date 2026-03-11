@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.focustracker.R
 import com.example.focustracker.databinding.FragmentTimerBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class TimerFragment : Fragment(R.layout.fragment_timer) {
 
 

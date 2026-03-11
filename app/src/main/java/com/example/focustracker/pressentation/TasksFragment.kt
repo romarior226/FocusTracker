@@ -15,9 +15,11 @@ import com.example.focustracker.data.TaskRepository
 import com.example.focustracker.data.TodoRepository
 import com.example.focustracker.data.database.AppDatabase
 import com.example.focustracker.databinding.FragmentTasksBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
 
@@ -27,13 +29,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         { task -> viewModel.updateTask(task) }
 
     )
-    private val viewModel: TaskViewModel by activityViewModels {
-        TaskViewModelFactory(
-            TaskRepository(AppDatabase.getDataBase(requireContext()).taskDao()),
-            HistoryRepository(AppDatabase.getDataBase(requireContext()).historyTaskDao()),
-            TodoRepository()
-        )
-    }
+    private val viewModel: TaskViewModel by activityViewModels()
 
     private var _binding: FragmentTasksBinding? = null
     private val binding: FragmentTasksBinding

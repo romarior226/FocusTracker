@@ -2,7 +2,9 @@ package com.example.focustracker.data.mapper
 
 import com.example.focustracker.data.entity.HistoryEntityDbModel
 import com.example.focustracker.data.entity.TaskEntityDbModel
-import com.example.focustracker.domain.Task
+import com.example.focustracker.data.network.TodoDto
+import com.example.focustracker.domain.entity.Task
+import com.example.focustracker.domain.entity.Todo
 
 
 fun Task.toEntityDbModel(): TaskEntityDbModel {
@@ -34,6 +36,13 @@ fun HistoryEntityDbModel.toTask() : Task {
         isDone = true,
         timeCreation = this.timeCreation,
         completedTime = this.completedTime
+    )
+}
+fun TodoDto.toTodo(): Todo {
+    return Todo(
+        id = this.id,
+        title = this.title,
+        completed = this.completed
     )
 }
 fun Task.toHistoryEntityDbModel() : HistoryEntityDbModel {

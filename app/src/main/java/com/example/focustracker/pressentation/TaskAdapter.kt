@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.focustracker.databinding.ItemTaskBinding
-import com.example.focustracker.domain.Task
+import com.example.focustracker.domain.entity.Task
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

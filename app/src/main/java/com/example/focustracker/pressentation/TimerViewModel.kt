@@ -4,13 +4,16 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TimerViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class TimerViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 
 
     val context = getApplication<Application>()

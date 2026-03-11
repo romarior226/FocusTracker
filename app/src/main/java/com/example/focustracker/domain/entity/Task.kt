@@ -1,4 +1,4 @@
-package com.example.focustracker.domain
+package com.example.focustracker.domain.entity
 
 data class Task(
     val id: Int,

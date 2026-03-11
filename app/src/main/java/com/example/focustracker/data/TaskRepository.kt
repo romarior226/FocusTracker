@@ -1,35 +1,31 @@
 package com.example.focustracker.data
 
 import com.example.focustracker.data.database.dao.TaskDao
-import com.example.focustracker.data.entity.TaskEntityDbModel
+import com.example.focustracker.data.mapper.toEntityDbModel
 import com.example.focustracker.data.mapper.toTask
-import com.example.focustracker.domain.Task
+import com.example.focustracker.domain.entity.Task
+import com.example.focustracker.domain.repo.TaskRepositoryInterface
+import javax.inject.Inject
 
-class TaskRepository(private val taskDao: TaskDao) {
-    suspend fun getAllTaskEntityDbModelList(): List<TaskEntityDbModel> {
-        return taskDao.getAllTasks()
-    }
-    suspend fun getNetworkTasksCount(): Int {
+class TaskRepository @Inject constructor(private val taskDao: TaskDao): TaskRepositoryInterface {
+
+    override suspend fun getNetworkTasksCount(): Int {
         return taskDao.getNetworkTasksCount()
     }
 
-    suspend fun getAllTaskList(): List<Task> {
-        return getAllTaskEntityDbModelList()
-            .map {
-                it.toTask()
-            }
+    override suspend fun getAllTaskList(): List<Task> {
+        return taskDao.getAllTasks().map { it.toTask() }
     }
 
-    suspend fun updateTask(taskEntityDbModel: TaskEntityDbModel) {
-        taskDao.updateTask(taskEntityDbModel)
+    override suspend fun insertTask(task: Task): Long {
+        return taskDao.insertTask(task.toEntityDbModel())
     }
 
-    suspend fun insertTask(taskEntityDbModel: TaskEntityDbModel): Long {
-      return  taskDao.insertTask(taskEntityDbModel)
+    override suspend fun updateTask(task: Task) {
+        taskDao.updateTask(task.toEntityDbModel())
     }
 
-    suspend fun deleteTask(taskEntityDbModel: TaskEntityDbModel) {
-        taskDao.deleteTask(taskEntityDbModel)
+    override suspend fun deleteTask(task: Task) {
+        taskDao.deleteTask(task.toEntityDbModel())
     }
-
 }
